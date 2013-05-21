@@ -294,7 +294,16 @@ def required_draft4(validator, required, instance, schema):
         return
     for property in required:
         if property not in instance:
-            yield ValidationError("%r is a required property" % property)
+            error = ValidationError("%r is a required property" % property)
+            error._set(
+                validator="required",
+                validator_value=required,
+                instance=instance,
+                schema=schema,
+            )
+            error.path.appendleft(property)
+            error.schema_path.extend([property, "required"])
+            yield error
 
 
 def minProperties_draft4(validator, mP, instance, schema):
