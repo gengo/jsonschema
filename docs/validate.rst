@@ -93,6 +93,12 @@ adhere to.
         An object representing the validator's meta schema (the schema that
         describes valid schemas in the given version).
 
+    .. attribute:: VALIDATORS
+
+        A mapping of validators (:class:`str`\s) to functions that validate the
+        validator property with that name. For more information see
+        :ref:`creating-validators`.
+
     .. attribute:: schema
 
         The schema that was passed in when initializing the validator.
@@ -174,13 +180,14 @@ given JSON type.
 :mod:`jsonschema` tries to strike a balance between performance in the common
 case and generality. For instance, JSON Schema defines a ``number`` type, which
 can be validated with a schema such as ``{"type" : "number"}``. By default,
-this will accept instances of Python :class:`number.Number`. This includes in
-particular :class:`int`\s and :class:`float`\s, along with `decimal.Decimal`
-objects, :class:`complex` numbers etc. For ``integer`` and ``object``, however,
-rather than checking for :class:`number.Integral` and
-:class:`collections.Mapping`, :mod:`jsonschema` simply checks for :class:`int`
-and :class:`dict`, since the former can introduce significant slowdown in these
-common cases.
+this will accept instances of Python :class:`numbers.Number`. This includes in
+particular :class:`int`\s and :class:`float`\s, along with
+:class:`decimal.Decimal` objects, :class:`complex` numbers etc. For
+``integer`` and ``object``, however, rather than checking for
+:class:`numbers.Integral` and :class:`collections.abc.Mapping`,
+:mod:`jsonschema` simply checks for :class:`int` and :class:`dict`, since the
+more general instance checks can introduce significant slowdown, especially
+given how common validating these types are.
 
 If you *do* want the generality, or just want to add a few specific additional
 types as being acceptible for a validator, :class:`IValidator`\s have a

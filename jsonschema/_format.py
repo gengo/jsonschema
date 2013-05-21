@@ -3,23 +3,7 @@ import re
 import socket
 from strings import ErrorStrings as strings
 
-from jsonschema.compat import PY3
-
-
-class FormatError(Exception):
-    def __init__(self, message, cause=None):
-        super(FormatError, self).__init__(message, cause)
-        self.message = message
-        self.cause = self.__cause__ = cause
-
-    def __str__(self):
-        return self.message.encode("utf-8")
-
-    def __unicode__(self):
-        return self.message
-
-    if PY3:
-        __str__ = __unicode__
+from jsonschema.exceptions import FormatError
 
 
 class FormatChecker(object):
